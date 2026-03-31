@@ -1,0 +1,106 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EdgeScript 设置</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header>
+        <h1>EdgeScript 设置中心</h1>
+        <p>配置模型、ASR、飞书知识库与风格学习。</p>
+      </header>
+
+      <section class="panel">
+        <h2>模型配置</h2>
+        <label>API Base URL <input id="llmBaseUrl" type="text" /></label>
+        <label>API Key <input id="llmApiKey" type="password" /></label>
+        <label>模型名 <input id="llmModel" type="text" /></label>
+        <label>温度 Temperature <input id="llmTemperature" type="number" min="0" max="2" step="0.1" /></label>
+        <label>失败重试次数 <input id="llmMaxRetries" type="number" min="0" max="6" step="1" /></label>
+        <label>笔记深度
+          <select id="noteDepth">
+            <option value="short">简版</option>
+            <option value="standard">标准</option>
+            <option value="deep">深度</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="panel">
+        <h2>音频转写（ASR）</h2>
+        <label class="checkbox">
+          <input id="enableAsrFallback" type="checkbox" />
+          无字幕时自动提取音频并转写
+        </label>
+        <label class="checkbox">
+          <input id="requireAsrWhenNoSubtitle" type="checkbox" />
+          无字幕时必须 ASR 成功（失败则终止，不回退简介）
+        </label>
+        <label>ASR API Base URL（可选，不填则复用模型 Base URL）
+          <input id="asrBaseUrl" type="text" placeholder="例如 http://127.0.0.1:8171/v1" />
+        </label>
+        <label>ASR API Key（可选，不填则复用模型 API Key）
+          <input id="asrApiKey" type="password" />
+        </label>
+        <label>转写模型 <input id="asrModel" type="text" placeholder="例如 whisper-1" /></label>
+        <label>单段最大音频大小 MB <input id="asrMaxAudioMB" type="number" min="1" max="100" step="1" /></label>
+        <label>最大分段数 <input id="asrMaxChunks" type="number" min="1" max="12" step="1" /></label>
+        <label>最大候选音频地址数 <input id="asrMaxCandidates" type="number" min="1" max="30" step="1" /></label>
+        <p>建议：本地 Whisper 先用 24MB / 6 段 / 16 候选，长视频可提升到 8~10 段。</p>
+      </section>
+
+      <section class="panel">
+        <h2>飞书知识库</h2>
+        <label>飞书 API Base URL <input id="feishuBaseUrl" type="text" /></label>
+        <label>App ID <input id="feishuAppId" type="text" /></label>
+        <label>App Secret <input id="feishuAppSecret" type="password" /></label>
+        <label>知识库 Space ID <input id="feishuWikiSpaceId" type="text" /></label>
+        <label>父节点 Token（可选） <input id="feishuParentNodeToken" type="text" /></label>
+        <label>对象类型
+          <select id="feishuWikiObjType">
+            <option value="docx">docx</option>
+            <option value="doc">doc</option>
+          </select>
+        </label>
+        <label class="checkbox">
+          <input id="autoImportToFeishu" type="checkbox" />
+          一键流程完成后自动导入飞书知识库
+        </label>
+      </section>
+
+      <section class="panel">
+        <h2>风格学习</h2>
+        <label class="checkbox">
+          <input id="enableStyleLearning" type="checkbox" />
+          启用历史笔记风格学习
+        </label>
+
+        <label>样本标题 <input id="sampleTitle" type="text" placeholder="例如：产品复盘模板" /></label>
+        <label>样本内容
+          <textarea id="sampleContent" rows="6" placeholder="粘贴你的历史笔记文本..."></textarea>
+        </label>
+        <div class="row">
+          <button id="addSampleBtn" class="btn">添加样本</button>
+          <input id="sampleFiles" type="file" accept=".txt,.md" multiple />
+        </div>
+        <div class="row">
+          <button id="refreshStyleBtn" class="btn">重新生成风格画像</button>
+        </div>
+        <pre id="styleProfileBox" class="profile-box">暂无风格画像</pre>
+
+        <h3>已存样本</h3>
+        <div id="sampleList" class="sample-list"></div>
+      </section>
+
+      <footer class="actions">
+        <button id="saveBtn" class="btn primary">保存设置</button>
+        <span id="statusText"></span>
+      </footer>
+    </main>
+
+    <script src="options.js"></script>
+  </body>
+</html>

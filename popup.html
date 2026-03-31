@@ -1,0 +1,42 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EdgeScript Video Notes</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="top">
+        <h1>EdgeScript 视频笔记</h1>
+        <button id="openOptionsBtn" class="ghost">设置</button>
+      </header>
+
+      <section class="card">
+        <p id="tabHint" class="hint">请在 B 站视频页面使用。</p>
+        <div class="run-actions">
+          <button id="checkBtn" class="ghost">运行前自检</button>
+          <button id="runBtn" class="primary">一键提取并生成笔记</button>
+        </div>
+        <button id="stopBtn" class="danger" disabled>强制终止当前任务</button>
+      </section>
+
+      <section class="card">
+        <h2>执行日志</h2>
+        <div id="logBox" class="log-box"></div>
+      </section>
+
+      <section class="card" id="resultCard">
+        <h2>最近结果</h2>
+        <div id="resultMeta" class="result-meta"></div>
+        <div class="actions">
+          <button id="copyNoteBtn" class="ghost">复制笔记</button>
+          <a id="wikiLink" class="link" target="_blank" rel="noreferrer">打开知识库页面</a>
+        </div>
+      </section>
+    </main>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,44 @@
+﻿{
+  "manifest_version": 3,
+  "name": "EdgeScript Video Note Assistant",
+  "version": "0.1.24",
+  "description": "One-click extract Bilibili transcript, generate notes, and import to Feishu knowledge base.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "tabs",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://www.bilibili.com/*",
+    "https://api.bilibili.com/*",
+    "https://*.hdslb.com/*",
+    "https://*.bilivideo.com/*",
+    "https://*.bilivideo.cn/*",
+    "https://*.akamaized.net/*",
+    "http://127.0.0.1/*",
+    "http://localhost/*",
+    "https://xlabapi.top/*",
+    "https://www.sophnet.com/*",
+    "https://open.feishu.cn/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "EdgeScript Video Notes"
+  },
+  "options_page": "options.html",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.bilibili.com/video/*"
+      ],
+      "js": [
+        "content-script.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}

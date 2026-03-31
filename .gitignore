@@ -1,0 +1,25 @@
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local ASR runtime
+local-asr-whisper/.venv/
+local-asr-whisper/*.log
+local-asr-whisper/asr_*.log
+local-asr-whisper/*.tmp
+local-asr-whisper/.cache/
+local-asr-whisper/models/
+
+# Node/Extension local state
+node_modules/
+*.local
+
+# IDE
+.vscode/
+.idea/
+

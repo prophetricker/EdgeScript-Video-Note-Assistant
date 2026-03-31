@@ -1,0 +1,175 @@
+:root {
+  --bg: #f4f5f0;
+  --panel: #ffffff;
+  --ink: #202522;
+  --muted: #5f6963;
+  --line: #d8dcd7;
+  --brand: #0f7a5f;
+  --brand-dark: #0a644d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: linear-gradient(130deg, #e8efe8 0%, var(--bg) 42%, #f8f4ef 100%);
+  color: var(--ink);
+}
+
+.page {
+  max-width: 920px;
+  margin: 24px auto;
+  padding: 0 16px 32px;
+}
+
+header h1 {
+  margin: 0 0 6px;
+}
+
+header p {
+  margin: 0 0 14px;
+  color: var(--muted);
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.panel h2 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+.panel h3 {
+  margin: 14px 0 8px;
+  font-size: 15px;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 8px;
+  color: #27302c;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  margin-top: 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px 10px;
+  font-size: 14px;
+  background: #fefefe;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkbox input {
+  width: auto;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  border: none;
+  background: #e9efec;
+  color: #25302c;
+  border-radius: 8px;
+  padding: 9px 12px;
+  cursor: pointer;
+}
+
+.primary {
+  background: linear-gradient(135deg, var(--brand), #17a17d);
+  color: #fff;
+  font-weight: 600;
+}
+
+.primary:hover {
+  background: linear-gradient(135deg, var(--brand-dark), #138564);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  bottom: 0;
+  background: #f4f5f0ee;
+  padding: 10px 0;
+}
+
+#statusText {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.profile-box {
+  background: #f7faf8;
+  border: 1px dashed #ccd7d0;
+  border-radius: 8px;
+  padding: 10px;
+  white-space: pre-wrap;
+  max-height: 260px;
+  overflow: auto;
+  font-size: 12px;
+}
+
+.sample-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.sample-item {
+  border: 1px solid #dfe4e1;
+  border-radius: 8px;
+  padding: 10px;
+  background: #fcfefd;
+}
+
+.sample-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.sample-title {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.sample-content {
+  color: #404d47;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  max-height: 140px;
+  overflow: auto;
+}
