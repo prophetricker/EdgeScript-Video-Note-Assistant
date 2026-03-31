@@ -23,3 +23,7 @@ node_modules/
 .vscode/
 .idea/
 
+# Release artifacts
+dist/
+.release-tmp/
+publish_github_last.log

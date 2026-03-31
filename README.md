@@ -1,91 +1,123 @@
 ﻿# EdgeScript Video Note Assistant
 
-一个 Edge 浏览器扩展（Manifest V3），用于在 B 站视频页一键完成：
+Edge 浏览器扩展（Manifest V3），用于在 B 站视频页一键生成结构化学习笔记，并可导入飞书知识库。
 
-1. 提取视频文本（优先字幕）。
-2. 无字幕时强制 ASR 音频转写（可配置）。
-3. 生成结构化学习笔记（Markdown）。
-4. 导入飞书知识库（主笔记 + 转写与时间戳文档）。
-5. 基于历史笔记样本做风格学习。
+## 功能特性
 
-## 目录结构
+- 字幕优先提取，自动识别并锁定当前视频 `BV/CID`。
+- 无字幕时走本地 ASR（Whisper），支持服务端下载音频转写。
+- 两阶段笔记生成（事实要点抽取 + 结构化写作），减少偏题。
+- 飞书双文档导入：
+  - 学习笔记
+  - 转写与时间戳
+- 运行日志持久化、异常可强制中断、429 自动退避重试。
+
+## 仓库结构
 
 - `manifest.json`：扩展清单
-- `content-script.js`：B 站页面提取与页面内 ASR
-- `background.js`：任务编排、模型调用、飞书导入、日志持久化
-- `popup.*`：一键执行与运行日志面板
-- `options.*`：设置页与风格样本管理
-- `local-asr-whisper/`：本地 Whisper（faster-whisper）服务
+- `background.js`：主流程编排、LLM/ASR/飞书集成
+- `content-script.js`：页面提取逻辑
+- `popup.*`：任务面板与日志
+- `options.*`：配置页
+- `local-asr-whisper/`：本地 ASR 服务
 
-## 安装方式
+## 给普通用户的安装方式（推荐）
 
-1. 打开 Edge：`edge://extensions/`
+### 1) 从 Release 下载
+
+在 GitHub Release 下载并解压：
+
+- `EdgeScript-extension-v*.zip`
+- `local-asr-whisper-v*.zip`
+
+### 2) 安装扩展
+
+1. 打开 `edge://extensions/`
 2. 开启“开发人员模式”
-3. 点击“加载解压缩的扩展”
-4. 选择目录：`d:\MyProject\EdgeScript`
+3. 点击“加载解压缩的扩展程序”
+4. 选择 `EdgeScript-extension` 解压目录
 
-## 必填配置
+### 3) 启动本地 ASR
 
-### 模型配置
+在 `local-asr-whisper` 目录执行：
 
-- `API Base URL`：例如 `https://www.sophnet.com/api/open-apis/v1`
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+.\setup.ps1 -PythonExe py -PythonVersionArg -3.11
+.\start_quick.ps1
+```
+
+保持该窗口运行。
+
+## 扩展配置说明
+
+### LLM（必填）
+
+- `API Base URL`：例如 `https://api.moonshot.cn/v1`
 - `API Key`
-- `模型名`：例如 `DeepSeek-V3.1-Fast`
+- `模型名`：例如 `kimi-k2`
 
-### ASR 配置（建议本地 Whisper）
+### ASR（推荐本地）
 
-- 勾选 `无字幕时自动提取音频并转写`
-- 建议勾选 `无字幕时必须 ASR 成功（失败则终止，不回退简介）`
-- `ASR Base URL`：例如 `http://127.0.0.1:8171/v1`
-- `ASR API Key`：本地服务可留空（或与你本地服务配置一致）
-- `转写模型`：`whisper-1`
+- 开启 `无字幕时自动提取音频并转写`
+- 开启 `无字幕时必须 ASR 成功`
+- `ASR Base URL`：`http://127.0.0.1:8171/v1`
+- `ASR API Key`：本地服务可留空
+- `ASR Model`：`whisper-1`
 
-### 飞书配置
+### 飞书（可选）
 
 - `App ID`
 - `App Secret`
 - `Space ID`
-- 可选：`父节点 Token`
+- `父节点 Token`（可选）
 
 ## 使用流程
 
-1. 打开 B 站视频详情页
+1. 打开 B 站视频页
 2. 在插件弹窗点击“运行前自检”
-3. 点击“一键提取并生成笔记”
-4. 结果会写入飞书知识库：
-- 主笔记文档
-- 转写与时间戳文档
-
-## 运行日志
-
-- 日志会按任务持久化到本地存储
-- 弹窗支持恢复最近多次任务日志
-- 不同任务之间使用分隔线展示
+3. 点击“开始任务”
+4. 等待结果写入飞书或本地日志
 
 ## 常见问题
 
-### 1. ASR `Failed to fetch`
+### 1) 任务卡在“结构化笔记生成”
 
-优先检查：
+- 当前版本有心跳日志和阶段超时。
+- 若超过 8 分钟会自动失败并提示。
+- 建议切换到响应更稳定的模型或降低并发任务。
 
-- 本地 ASR 服务是否在运行（`http://127.0.0.1:8171/v1/models`）
-- 设置中的 ASR URL / Key 是否正确
-- 扩展是否已刷新到最新版本
+### 2) ASR 连不上
 
-如果你使用的是本地 Whisper，建议按下面顺序操作：
+先检查：
 
-1. 打开 PowerShell，进入目录：`d:\MyProject\EdgeScript\local-asr-whisper`
-2. 临时放开当前窗口脚本策略：`Set-ExecutionPolicy -Scope Process Bypass`
-3. 启动服务：`.\start_quick.ps1`
-4. 保持该窗口不要关闭，再回到扩展点“运行前自检”
+- `http://127.0.0.1:8171/health`
+- `http://127.0.0.1:8171/v1/models`
 
-### 2. 飞书已创建文档但位置不对
+### 3) 转写文本繁体
 
-- 请检查 `Space ID` 与 `父节点 Token`
-- 若父节点权限不足，可能会创建文档但挂载失败
+本地 ASR 默认开启 `ZH_TEXT_CONVERT_MODE=t2s`（繁转简）。
 
-### 3. 无字幕时生成内容空泛
+## 发布者指南
 
-- 启用“无字幕必须 ASR 成功”
-- 未成功转写时任务会终止，不再回退简介文本
+本仓库已内置打包脚本，可直接生成 Release 附件：
 
+```powershell
+cd d:\MyProject\EdgeScript
+.\build_release.ps1
+```
+
+输出目录：
+
+- `dist/EdgeScript-extension-v{manifest.version}.zip`
+- `dist/local-asr-whisper-v{server.APP_VERSION}.zip`
+- `dist/SHA256SUMS.txt`
+
+## 安全与隐私
+
+- 请勿提交任何 API Key、飞书密钥、cookie 文件。
+- 建议仅在本地配置密钥。
+
+## 许可证
+
+本项目基于 [MIT License](./LICENSE) 开源。
