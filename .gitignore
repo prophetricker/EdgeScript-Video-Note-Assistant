@@ -26,4 +26,11 @@ node_modules/
 # Release artifacts
 dist/
 .release-tmp/
+
+# Local publish/release helper scripts (keep local only)
+publish_github.ps1
+publish_github.cmd
+publish_github_double_click.vbs
+build_release.ps1
+build_release.cmd
 publish_github_last.log
